@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avishka Sandaruwan | Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- NAVIGATION --- */
+        header {
+            padding: 1.5rem 9%;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 238, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { font-size: 1.6rem; font-weight: 700; }
+        .logo span { color: #00eeff; }
+
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 2.5rem; }
+        nav ul li a {
+            text-decoration: none;
+            color: #cbd5e1;
+            font-weight: 500;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: #00eeff;
+            text-shadow: 0 0 10px #00eeff;
+        }
+
+        /* --- PAGE CONTENT CONTROL --- */
+        .page-section {
+            display: none;
+            padding: 120px 9% 100px;
+            min-height: 100vh;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page-section.active-page {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HERO --- */
+        .hero { align-items: center; justify-content: space-between; gap: 4rem; flex-direction: row !important; }
+        .hero-content { flex: 1; }
+        .hero-content h1 { font-size: 4rem; margin: 0.5rem 0; color: white; }
+        .hero-content h3 span { color: #00eeff; }
+        .hero-content p { margin: 1.5rem 0; color: #94a3b8; line-height: 1.8; }
+
+        .social-icons a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 45px; height: 45px;
+            border: 2px solid #00eeff;
+            border-radius: 50%;
+            color: #00eeff;
+            margin-right: 1.2rem;
+            transition: 0.4s;
+            text-decoration: none;
+        }
+
+        .social-icons a:hover {
+            background: #00eeff;
+            color: #0f172a;
+            box-shadow: 0 0 20px #00eeff;
+            transform: translateY(-5px);
+        }
+
+        /* --- HERO IMAGE --- */
+        .hero-img {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .circular-frame {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: #0f172a;
+            border: 5px solid #00eeff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            filter: drop-shadow(0 0 20px rgba(0, 238, 255, 0.8));
+            transition: 0.5s;
+            cursor: pointer;
+        }
+
+        .circular-frame img {
+            width: 150%;
+            height: 150%;
+            object-fit: cover;
+            object-position: center top;
+            transition: 0.5s;
+        }
+
+        .circular-frame:hover {
+            transform: scale(1.03);
+            filter: drop-shadow(0 0 35px rgba(0, 238, 255, 1));
+        }
+
+        /* --- TITLES --- */
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
+        .section-title span { color: #00eeff; }
+
+        /* --- BUTTONS --- */
+        .btn-gradient {
+            background: linear-gradient(90deg, #00eeff, #0077ff);
+            color: #0f172a;
+            padding: 10px 28px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: inline-block;
+            transition: 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-gradient:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 238, 255, 0.5);
+            filter: brightness(1.1);
+        }
+
+        /* --- SKILLS GRID --- */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .skill-card {
+            background: #1e293b;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.3s;
+            text-align: center;
+        }
+        .skill-card:hover { transform: translateY(-10px); border-color: #00eeff; }
+        .skill-card img { width: 100%; height: 200px; object-fit: cover; cursor: pointer; }
+        .skill-info { padding: 1.5rem; }
+        .skill-info h4 { margin-bottom: 10px; color: #00eeff; }
+        .skill-info p { font-size: 0.9rem; color: #cbd5e1; margin-bottom: 1.5rem; }
+
+        /* --- POPUP MODAL (Cleaned border/glow) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            max-width: 85%;
+            max-height: 80%;
+            border-radius: 10px;
+            border: none; /* Removed blue border */
+            box-shadow: none; /* Removed blue glow */
+        }
+
+        /* Custom Popup Box for Info */
+        .info-popup-box {
+            background: #1e293b;
+            padding: 2.5rem;
+            border-radius: 20px;
+            max-width: 550px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .info-popup-box h2 { color: #00eeff; margin-bottom: 15px; }
+        .info-popup-box p { color: #cbd5e1; line-height: 1.8; }
+
+        .close-modal {
+            position: absolute;
+            top: 20px; right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .close-modal:hover { color: #00eeff; }
+
+        /* --- PORTFOLIO & CONTACT --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .project-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(0, 238, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: 0.3s;
+            position: relative;
+        }
+        .project-card:hover { transform: translateY(-5px); border-color: #00eeff; }
+        .project-img { width: 100%; height: 200px; background-size: cover; background-position: center; position: relative; cursor: pointer; }
+        .link-tag {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 5px 12px; border-radius: 5px;
+            font-size: 0.75rem; border: 1px solid #00eeff; color: #00eeff;
+        }
+        .project-info { padding: 1.5rem; }
+        .project-info .status { color: #00eeff; font-size: 0.8rem; display: block; margin-bottom: 8px; }
+
+        /* --- FOOTER --- */
+        footer {
+            position: fixed;
+            bottom: 0; width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            padding: 15px 9%;
+            display: flex; justify-content: space-around;
+            border-top: 1px solid rgba(0, 238, 255, 0.1);
+            font-size: 0.85rem; z-index: 100;
+        }
+        footer span i { color: #00eeff; margin-right: 8px; }
+
+        @media (max-width: 768px) {
+            .hero { flex-direction: column !important; text-align: center; padding-top: 150px; }
+            .hero-content h1 { font-size: 2.5rem; }
+            footer { flex-direction: column; gap: 10px; position: relative; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particleCanvas"></canvas>
+
+    <div id="mainModal" class="modal">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImg">
+        <div id="modalInfo" class="info-popup-box" style="display: none;">
+            <h2 id="infoTitle"></h2>
+            <p id="infoDesc"></p>
+        </div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo">Avishka Portfolio<span>.</span></div>
+            <ul id="nav-links">
+                <li><a onclick="openPage('home')" id="link-home" class="active">Home</a></li>
+                <li><a onclick="openPage('about')" id="link-about">About</a></li>
+                <li><a onclick="openPage('skills')" id="link-skills">Skills</a></li>
+                <li><a onclick="openPage('portfolio')" id="link-portfolio">Portfolio</a></li>
+                <li><a onclick="openPage('contact')" id="link-contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="page-section hero active-page">
+        <div class="hero-content">
+            <h3>Hello, It's Me</h3>
+            <h1>Avishka Sandaruwan</h1>
+            <h3>And I'm a <span>Computer Networks Student</span></h3>
+            <p>Specializing in network architecture and security at NSBM Green University. I build robust, scalable, and secure infrastructures.</p>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/share/1BFrUGRNZA/?mibextid=wwXIfr"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/avishka._sandaruwan?igsh=MXR2Ym5iOHR5dXljcw%3D%3D&utm_source=qr"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/avishka-sandaruwan-358b952b3/"><i class="fab fa-linkedin-in"></i></a>
+                <a href="mailto:avishkasandaruwan399@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
+            <br>
+            <a href="#" class="btn-gradient">Download CV</a>
+        </div>
+        <div class="hero-img">
+            <div class="circular-frame" onclick="openModal('11.png')">
+                <img src="11.png" alt="Avishka">
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="page-section">
+        <h2 class="section-title">My <span>Certificates</span></h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <img src="Python.PNG" onclick="openModal(this.src)">
+                <div class="skill-info">
+                    <h4>Python Essentials 1</h4>
+                    <p></p>
+                    <button class="btn-gradient" onclick="showInfo('Python Essentials 1', 'I have successfully completed Python Essentials 1 through Cisco Networking Academy and OpenEDG Python Institute.This achievement marks an important step in my journey toward becoming a skilled programmer. Excited to continue learning and growing in software development.Thank you for Cisco Networking Academy badge: https://lnkd.in/ghHspNcN')">Learn More</button>
+                </div>
+            </div>
+            <div class="skill-card">
+                <img src="P1.jpg" onclick="openModal(this.src)">
+                <div class="skill-info">
+                    <h4>Python For Begeiners</h4>
+                    <p></p>
+                    <button class="btn-gradient" onclick="showInfo('Python For Begeiners', 'I have successfully completed the course offered by the Open Learning Platform of University of Moratuwa. conducted by Department of Computer Science & Engineering .Join me in unlocking this opportunity, explore course details now!https://open.uom.lk/verify')">Learn More</button>
+                </div>
+            </div>
+            <div class="skill-card">
+                <img src="P2.jpg" onclick="openModal(this.src)">
+                <div class="skill-info">
+                    <h4>Python Progrmming</h4>
+                    <p></p>
+                    <button class="btn-gradient" onclick="showInfo('Python Progrmming', 'I successfully completed the Python Programming course conducted by the University of Moratuwa through the Centre for Open & Distance Learning (CODL).This program enhanced my knowledge in Python fundamentals, Object-Oriented Programming (OOP), and problem-solving techniques. It strengthened my logical thinking and programming skills, enabling me to develop efficient and structured solutions.Looking forward to applying these skills in real-world projects and continuous learning.')">Learn More</button>
+                </div>
+            </div>
+            <div class="skill-card">
+                <img src="W1.jpg" onclick="openModal(this.src)">
+                <div class="skill-info">
+                    <h4>Web Desing For Beginners</h4>
+                    <p></p>
+                    <button class="btn-gradient" onclick="showInfo('Web Design for Beginners', 'I have successfully completed the  course offered by the Open Learning Platform of University of Moratuwa. conducted by Department of Information Technology .Join me in unlocking this opportunity, explore course details now!https://open.uom.lk/verify')">Learn More</button>
+                </div>
+            </div>
+            <div class="skill-card">
+                <img src="N1.jpg" onclick="openModal(this.src)">
+                <div class="skill-info">
+                    <h4>Networking Basic</h4>
+                    <p></p>
+                    <button class="btn-gradient" onclick="showInfo('Networking Basic','I’m pleased to share that I have successfully completed the Networking Basics course. This learning experience has strengthened my interest in IT and provided valuable knowledge for my future career development.')">Learn More</button>
+                </div>
+            </div>
+            <div class="skill-card">
+                <img src="F1.jpg" onclick="openModal(this.src)">
+                <div class="skill-info">
+                    <h4>UI/UX Design-Figma</h4>
+                    <p></p>
+                    <button class="btn-gradient" onclick="showInfo('UI/UX Design-Figma', 'Prototyping user flows and high-fidelity designs in Figma.The FigMate-UI/UX Figma Workshop 2025, hosted by the Association of Computer and Data Science at NSBM Green University, was a lot of fun. This event was a fantastic opportunity to gain practical experience with Figma and learn about UI/UX design ideas.Big thanks to Ravindu Lankathilaka and Mr. Muditha Batagoda for sharing their expertise and demonstrating best practices in interface design. Their advice on design customisation, reusable components, and wireframing was really beneficial! I cant wait to put these new abilities to work in my next projects and advance in the UI/UX design industry.')">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="page-section">
+        <h2 class="section-title">My <span>Creative Projects</span></h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400');" onclick="openModal(this.style.backgroundImage.slice(5,-2))">
+                    <span class="link-tag"><i class="fas fa-link"></i> Live Link</span>
+                </div>
+                <div class="project-info">
+                    <h4>Web Development</h4>
+                    <span class="status">Completed</span>
+                    <p>Tech: HTML, CSS, JavaScript</p>
+                </div>
+            </div>
+            </div>
+    </section>
+    
+
+    <section id="about" class="page-section">
+        <h2 class="section-title">About <span>Me</span></h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto; line-height: 2; color: #cbd5e1;">
+            I am a student at NSBM Green University with a deep interest in how the world connects. 
+            My goal is to become a top-tier Network Engineer, creating secure and efficient data environments.
+        </p>
+    </section>
+
+    <section id="contact" class="page-section">
+        <h2 class="section-title">Contact <span>Me</span></h2>
+        <div style="text-align: center;">
+            <a href="mailto:avishkasandaruwan399@gmail.com" class="btn-gradient">Send a Message</a>
+        </div>
+    </section>
+
+    <footer>
+        <span><i class="fas fa-phone"></i> 0718954623</span>
+        <span><i class="fas fa-envelope"></i> avishkasandaruwan399@gmail.com</span>
+        <span><i class="fab fa-linkedin"></i> LinkedIn Profile</span>
+    </footer>
+
+    <script>
+        // NAVIGATION LOGIC
+        function openPage(pageId) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => section.classList.remove('active-page'));
+            document.getElementById(pageId).classList.add('active-page');
+            
+            const links = document.querySelectorAll('nav ul li a');
+            links.forEach(link => link.classList.remove('active'));
+            document.getElementById('link-' + pageId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        // MODAL LOGIC
+        function openModal(imgSrc) {
+            const modal = document.getElementById("mainModal");
+            const modalImg = document.getElementById("modalImg");
+            const modalInfo = document.getElementById("modalInfo");
+            
+            modalInfo.style.display = "none";
+            modalImg.style.display = "block";
+            modalImg.src = imgSrc;
+            modal.style.display = "flex";
+        }
+
+        function showInfo(title, desc) {
+            const modal = document.getElementById("mainModal");
+            const modalImg = document.getElementById("modalImg");
+            const modalInfo = document.getElementById("modalInfo");
+            
+            modalImg.style.display = "none";
+            modalInfo.style.display = "block";
+            
+            document.getElementById("infoTitle").innerText = title;
+            document.getElementById("infoDesc").innerText = desc;
+            modal.style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("mainModal").style.display = "none";
+        }
+
+        // Close modal on click outside content
+        window.onclick = function(event) {
+            const modal = document.getElementById("mainModal");
+            if (event.target == modal) { closeModal(); }
+        }
+
+        // PARTICLE BACKGROUND
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1.5 - 0.75;
+                this.speedY = Math.random() * 1.5 - 0.75;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0; else if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0; else if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 238, 255, 0.4)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            particles = [];
+            for (let i = 0; i < 70; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.strokeStyle = `rgba(0, 238, 255, ${1 - dist/150})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        init(); animate();
+        window.addEventListener('resize', () => { 
+            canvas.width = window.innerWidth; 
+            canvas.height = window.innerHeight; 
+            init(); 
+        });
+    </script>
+</body>
+</html>

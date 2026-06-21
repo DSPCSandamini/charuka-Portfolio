@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avishka Sandaruwan | Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- NAVIGATION --- */
+        header {
+            padding: 1.5rem 9%;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 238, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo { font-size: 1.6rem; font-weight: 700; }
+        .logo span { color: #00eeff; }
+
+        nav ul { display: flex; list-style: none; }
+        nav ul li { margin-left: 2.5rem; }
+        nav ul li a {
+            text-decoration: none;
+            color: #cbd5e1;
+            font-weight: 500;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: #00eeff;
+            text-shadow: 0 0 10px #00eeff;
+        }
+
+        /* --- PAGE CONTENT CONTROL --- */
+        .page-section {
+            display: none;
+            padding: 120px 9% 100px;
+            min-height: 100vh;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page-section.active-page {
+            display: flex;
+            flex-direction: column;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HERO --- */
+        .hero { align-items: center; justify-content: space-between; gap: 4rem; flex-direction: row !important; }
+        .hero-content { flex: 1; }
+        .hero-content h1 { font-size: 4rem; margin: 0.5rem 0; color: white; }
+        .hero-content h3 span { color: #00eeff; }
+        .hero-content p { margin: 1.5rem 0; color: #94a3b8; line-height: 1.8; }
+
+        .social-icons a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 45px; height: 45px;
+            border: 2px solid #00eeff;
+            border-radius: 50%;
+            color: #00eeff;
+            margin-right: 1.2rem;
+            transition: 0.4s;
+            text-decoration: none;
+        }
+
+        .social-icons a:hover {
+            background: #00eeff;
+            color: #0f172a;
+            box-shadow: 0 0 20px #00eeff;
+            transform: translateY(-5px);
+        }
+
+        /* --- UPDATED HERO IMAGE & CIRCULAR FRAME --- */
+        .hero-img {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .circular-frame {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: #0f172a;
+            border: 5px solid #00eeff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            filter: drop-shadow(0 0 20px rgba(0, 238, 255, 0.8));
+            transition: 0.5s;
+            cursor: pointer;
+        }
+
+        .circular-frame img {
+            width: 150%;
+            height: 150%;
+            object-fit: cover;
+            object-position: center top;
+            transition: 0.5s;
+        }
+
+        .circular-frame:hover {
+            transform: scale(1.03);
+            filter: drop-shadow(0 0 35px rgba(0, 238, 255, 1));
+        }
+
+        .circular-frame:hover img {
+            transform: scale(1.05);
+        }
+
+        /* --- TITLES --- */
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 3rem; }
+        .section-title span { color: #00eeff; }
+
+        /* --- BUTTONS --- */
+        .btn-gradient {
+            background: linear-gradient(90deg, #00eeff, #0077ff);
+            color: #0f172a;
+            padding: 10px 28px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: inline-block;
+            transition: 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-gradient:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 238, 255, 0.5);
+            filter: brightness(1.1);
+        }
+
+        /* --- SKILLS --- */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .skill-card {
+            background: #1e293b;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: 0.3s;
+            text-align: center;
+        }
+        .skill-card:hover { transform: translateY(-10px); border-color: #00eeff; }
+        .skill-card img { width: 100%; height: 200px; object-fit: cover; }
+        .skill-info { padding: 1.5rem; }
+        .skill-info h4 { margin-bottom: 10px; color: #00eeff; }
+        .skill-info p { font-size: 0.9rem; color: #cbd5e1; margin-bottom: 1.5rem; }
+
+        /* --- PORTFOLIO --- */
+        .portfolio-container { display: flex; flex-direction: column; gap: 4rem; }
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+        .project-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(0, 238, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: 0.3s;
+            position: relative;
+        }
+        .project-card:hover { transform: translateY(-5px); border-color: #00eeff; }
+        .project-img { width: 100%; height: 200px; background-size: cover; background-position: center; position: relative; }
+        .link-tag {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 5px 12px; border-radius: 5px;
+            font-size: 0.75rem; border: 1px solid #00eeff; color: #00eeff;
+        }
+        .project-info { padding: 1.5rem; }
+        .project-info .status { color: #00eeff; font-size: 0.8rem; display: block; margin-bottom: 8px; }
+        .tech-stack { font-size: 0.85rem; color: #94a3b8; }
+
+        .bottom-portfolio-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+        }
+        .sub-section-box {
+            background: rgba(30, 41, 59, 0.3);
+            padding: 2rem; border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .sub-section-box h3 span { color: #00eeff; }
+        .feedback-item { display: flex; align-items: center; gap: 1.5rem; margin-top: 1.5rem; }
+        .client-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #00eeff; }
+        .awards-icons {
+            display: flex; gap: 2rem; flex-wrap: wrap;
+            justify-content: center; margin-top: 1.5rem;
+        }
+        .award-icon { font-size: 3rem; color: #00eeff; filter: drop-shadow(0 0 8px rgba(0, 238, 255, 0.4)); }
+
+        /* --- FOOTER --- */
+        footer {
+            position: fixed;
+            bottom: 0; width: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            padding: 15px 9%;
+            display: flex; justify-content: space-around;
+            border-top: 1px solid rgba(0, 238, 255, 0.1);
+            font-size: 0.85rem; z-index: 100;
+        }
+        footer span i { color: #00eeff; margin-right: 8px; }
+
+        @media (max-width: 768px) {
+            .hero { flex-direction: column !important; text-align: center; padding-top: 150px; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .bottom-portfolio-grid { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 10px; position: relative; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particleCanvas"></canvas>
+
+    <header>
+        <nav>
+            <div class="logo">Avishka Portfolio<span>.</span></div>
+            <ul id="nav-links">
+                <li><a onclick="openPage('home')" id="link-home" class="active">Home</a></li>
+                <li><a onclick="openPage('about')" id="link-about">About</a></li>
+                <li><a onclick="openPage('skills')" id="link-skills">Skills</a></li>
+                <li><a onclick="openPage('portfolio')" id="link-portfolio">Portfolio</a></li>
+                <li><a onclick="openPage('contact')" id="link-contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="page-section hero active-page">
+        <div class="hero-content">
+            <h3>Hello, It's Me</h3>
+            <h1>Avishka Sandaruwan</h1>
+            <h3>And I'm a <span>Computer Networks Student</span></h3>
+            <p>Specializing in network architecture and security at NSBM Green University. I build robust, scalable, and secure infrastructures.</p>
+            <div class="social-icons">
+                <a href="https://www.facebook.com/share/1BFrUGRNZA/?mibextid=wwXIfr" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/avishka._sandaruwan?igsh=MXR2Ym5iOHR5dXljcw%3D%3D&utm_source=qr" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/avishka-sandaruwan-358b952b3/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                <a href="mailto:avishkasandaruwan399@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
+            <br>
+            <a href="#" class="btn-gradient">Download CV</a>
+        </div>
+        <div class="hero-img">
+            <div class="circular-frame">
+                <img src="11.png" alt="Avishka Sandaruwan">
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="page-section">
+        <h2 class="section-title">My <span>Technical Skills</span></h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&w=400" alt="Networking">
+                <div class="skill-info">
+                    <h4>Network Design</h4>
+                    <p>Expertise in Cisco Packet Tracer, GNS3, and enterprise topology planning.</p>
+                    <a href="#" class="btn-gradient">Learn More</a>
+                </div>
+            </div>
+            <div class="skill-card">
+                <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=400" alt="Routing">
+                <div class="skill-info">
+                    <h4>Routing & Switching</h4>
+                    <p>Configuration of OSPF, BGP, VLANs, and Inter-VLAN routing protocols.</p>
+                    <a href="#" class="btn-gradient">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="page-section">
+        <h2 class="section-title">My <span>Creative Projects</span></h2>
+        
+        <div class="portfolio-container">
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400');">
+                        <span class="link-tag"><i class="fas fa-link"></i> Live Link</span>
+                    </div>
+                    <div class="project-info">
+                        <h4>Web Development</h4>
+                        <span class="status">Conceptualized</span>
+                        <p class="tech-stack">Tech: HTML, CSS, JavaScript</p>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=400');">
+                        <span class="link-tag"><i class="fas fa-book-open"></i> Case Study</span>
+                    </div>
+                    <div class="project-info">
+                        <h4>Graphic Design</h4>
+                        <span class="status">Conceptualized</span>
+                        <p class="tech-stack">Tech: Adobe Illustrator</p>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-img" style="background-image: url('https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?auto=format&fit=crop&w=400');">
+                        <span class="link-tag"><i class="fab fa-figma"></i> Figma Prototype</span>
+                    </div>
+                    <div class="project-info">
+                        <h4>UI/UX Design</h4>
+                        <span class="status">Conceptualized</span>
+                        <p class="tech-stack">Tech: Figma, Adobe XD</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-portfolio-grid">
+                <div class="sub-section-box">
+                    <h3>Testimonials <span>(Client Feedback)</span></h3>
+                    <div class="feedback-item">
+                        <img src="https://via.placeholder.com/60" alt="Client" class="client-avatar">
+                        <div class="feedback-text">
+                            <p>"Great work, very professional and attention to detail!"</p>
+                            <span style="color:#00eeff">- N. Dias</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sub-section-box">
+                    <h3>Certificates & <span>Awards</span></h3>
+                    <div class="awards-icons">
+                        <i class="fas fa-certificate award-icon" title="Google UX Design"></i>
+                        <i class="fas fa-medal award-icon" title="Top Performer"></i>
+                        <i class="fas fa-graduation-cap award-icon" title="Network Associate"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="page-section">
+        <h2 class="section-title">About <span>Me</span></h2>
+        <p style="text-align: center; max-width: 800px; margin: 0 auto; line-height: 2; color: #cbd5e1;">
+            I am a student at NSBM Green University with a deep interest in how the world connects. 
+            My goal is to become a top-tier Network Engineer, creating secure and efficient data environments. 
+            Beyond networking, I have a passion for creative UI design and technical problem-solving.
+        </p>
+    </section>
+    
+
+    <section id="contact" class="page-section">
+        <h2 class="section-title">Contact <span>Me</span></h2>
+        <p style="text-align: center; color: #cbd5e1;">Feel free to reach out for collaborations or networking opportunities!</p>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="mailto:avishkasandaruwan399@gmail.com" class="btn-gradient">Send a Message</a>
+        </div>
+    </section>
+
+    <footer>
+        <span><i class="fas fa-phone"></i> 0718954623</span>
+        <span><i class="fas fa-envelope"></i> avishkasandaruwan399@gmail.com</span>
+        <span><i class="fab fa-linkedin"></i> LinkedIn Profile</span>
+    </footer>
+
+    <script>
+        function openPage(pageId) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => section.classList.remove('active-page'));
+
+            const activeSection = document.getElementById(pageId);
+            activeSection.classList.add('active-page');
+
+            const links = document.querySelectorAll('nav ul li a');
+            links.forEach(link => link.classList.remove('active'));
+            document.getElementById('link-' + pageId).classList.add('active');
+            
+            window.scrollTo(0,0);
+        }
+
+        /* --- BACKGROUND PARTICLES --- */
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particles = [];
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 1.5 - 0.75;
+                this.speedY = Math.random() * 1.5 - 0.75;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0; else if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0; else if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 238, 255, 0.4)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            particles = [];
+            for (let i = 0; i < 70; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.strokeStyle = `rgba(0, 238, 255, ${1 - dist/150})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        init(); animate();
+        window.addEventListener('resize', () => { 
+            canvas.width = window.innerWidth; 
+            canvas.height = window.innerHeight; 
+            init(); 
+        });
+    </script>
+</body>
+</html>
