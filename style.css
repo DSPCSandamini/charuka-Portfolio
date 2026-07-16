@@ -455,11 +455,13 @@ transform:translateY(-10px);
    PROJECTS
 ======================= */
 
-.projects-container {
+.projects-container{
 
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 35px;
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(480px,1fr));
+
+    gap:35px;
 
 }
 
@@ -576,6 +578,37 @@ transform:translateY(-10px);
 
 }
 
+.project-btn{
+
+    display:inline-block;
+
+    margin-top:20px;
+
+    padding:12px 24px;
+
+    border-radius:30px;
+
+    text-decoration:none;
+
+    color:white;
+
+    background:linear-gradient(
+        45deg,
+        var(--ocean-blue),
+        var(--sky-blue)
+    );
+
+    transition:.3s;
+
+}
+
+.project-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 0 20px rgba(113,183,213,.4);
+
+}
 
 /* Contact */
 
